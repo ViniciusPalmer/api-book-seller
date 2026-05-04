@@ -1,3 +1,4 @@
+import { author } from '../models/Author.js';
 import book from '../models/Book.js';
 
 class BookController {
@@ -24,9 +25,14 @@ class BookController {
     }
 
     static async createNewBook(req, res) {
+
+        const newBook = req.body;
+
         try {
-            const newBook = await book.create(req.body);
-            return res.status(201).send({ message: 'Criado com sucesso', book: newBook });
+            const authorData = await author.findById(newBook.author);
+            const fullBook = { ...newBook, author: { ...authorData._doc } };
+            const createdBook = await book.create(fullBook);
+            return res.status(201).send({ message: 'Criado com sucesso', book: createdBook });
         } catch (error) {
             return res.status(500).json({ message: `${error.message} - Falha ao cadastrar livro` });
         }
@@ -55,6 +61,28 @@ class BookController {
             return res.status(204).send();
         } catch (error) {
             return res.status(500).json({ message: `${error.message} - Falha ao deletar o livro` });
+        }
+    }
+
+    static async searchBooks(req, res) {
+        try {
+            const { title, year, gender, price } = req.query;
+            const query = {};
+
+            if (title) query.title = { $regex: title, $options: 'i' };
+            if (year) query.year = Number(year);
+            if (gender) query.gender = { $regex: gender, $options: 'i' };
+            if (price) query.price = Number(price);
+
+            const results = await book.find(query);
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'Nenhum livro encontrado' });
+            }
+
+            return res.status(200).json(results);
+        } catch (error) {
+            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
         }
     }
 }

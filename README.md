@@ -6,6 +6,7 @@ A REST API for managing books, built with **Express.js** and **MongoDB**.
 
 - 📖 **CRUD Operations** — Create, Read, Update, and Delete books
 - 🔍 **Get by ID** — Retrieve specific books by their ID
+- 🔎 **Search Books** — Filter books by title, year, gender, or price
 - 🌐 **Express Server** — Fast and lightweight web server
 - 💾 **MongoDB Database** — Persistent data storage with Mongoose ODM
 - ⚡ **Hot Reload** — Development mode with Nodemon
@@ -77,6 +78,7 @@ The server will start at **http://localhost:3000/**
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/livros` | Get all books |
+| GET | `/livros/busca` | Search books by query params |
 | GET | `/livros/:id` | Get a book by ID |
 | POST | `/livros` | Create a new book |
 | PUT | `/livros/:id` | Update a book |
@@ -96,6 +98,25 @@ The server will start at **http://localhost:3000/**
   "price": 12.99,
   "pages": 180
 }
+```
+
+### Search Books
+
+**GET** `/livros/busca`
+
+Query parameters (all optional):
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `title` | string | Search by title (case-insensitive) |
+| `year` | number | Filter by publication year |
+| `gender` | string | Filter by gender (case-insensitive) |
+| `price` | number | Filter by exact price |
+
+**Example:** `GET /livros/busca?gender=terror&year=2022`
+
+```bash
+curl "http://localhost:3000/livros/busca?title=gatsby"
 ```
 
 ## 🧪 Linting

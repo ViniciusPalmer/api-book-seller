@@ -28,11 +28,14 @@ A REST API for managing books, built with **Express.js** and **MongoDB**.
 │   ├── config/
 │   │   └── dbConnect.js       # MongoDB connection
 │   ├── controllers/
-│   │   └── bookController.js  # Book business logic
+│   │   ├── bookController.js  # Book business logic
+│   │   └── authorController.js # Author business logic
 │   ├── models/
-│   │   └── Book.js            # Mongoose schema
+│   │   ├── Book.js            # Mongoose schema
+│   │   └── Author.js          # Author schema
 │   ├── rotes/
 │   │   ├── booksRoutes.js      # Book API routes
+│   │   ├── authorsRoutes.js    # Author API routes
 │   │   └── index.js            # Route aggregator
 │   └── app.js                  # Express app setup
 ├── server.js                   # Server entry point
@@ -75,6 +78,8 @@ The server will start at **http://localhost:3000/**
 
 ## 📡 API Endpoints
 
+### Books
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/livros` | Get all books |
@@ -84,6 +89,16 @@ The server will start at **http://localhost:3000/**
 | PUT | `/livros/:id` | Update a book |
 | DELETE | `/livros/:id` | Delete a book |
 
+### Authors
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/autores` | Get all authors |
+| GET | `/autores/:id` | Get an author by ID |
+| POST | `/autores` | Create a new author |
+| PUT | `/autores/:id` | Update an author |
+| DELETE | `/autores/:id` | Delete an author |
+
 ### Example Request
 
 **POST** `/livros`
@@ -91,7 +106,7 @@ The server will start at **http://localhost:3000/**
 ```json
 {
   "title": "The Great Gatsby",
-  "author": "F. Scott Fitzgerald",
+  "author": "AUTHOR_ID",
   "year": 1925,
   "gender": "Fiction",
   "isbn": "978-0-7432-7356-5",
@@ -99,6 +114,8 @@ The server will start at **http://localhost:3000/**
   "pages": 180
 }
 ```
+
+> Replace `AUTHOR_ID` with a valid author ID from `/autores` endpoint.
 
 ### Search Books
 

@@ -1,3 +1,4 @@
+import NotFound from '../errors/NotFound.js';
 import { author } from '../models/Author.js';
 
 class AuthorController {
@@ -15,7 +16,7 @@ class AuthorController {
             const id = req.params.id;
             const result = await author.findById(id);
             if (!result) {
-                return res.status(404).json({ error: 'Autor não encontrado' });
+                return next(new NotFound('Autor não encontrado'));
             }
             return res.status(200).json(result);
         } catch (error) {
@@ -28,7 +29,7 @@ class AuthorController {
             const name = req.params.name;
             const result = await author.find({ name });
             if (!result || result.length === 0) {
-                return res.status(404).json({ error: 'Autor não encontrado' });
+                return next(new NotFound('Autor não encontrado'));
             }
             return res.status(200).json(result);
         } catch (error) {
@@ -49,7 +50,7 @@ class AuthorController {
         try {
             const id = req.params.id;
             if (!id) {
-                return res.status(404).json({ error: 'Autor não encontrado' });
+                return next(new NotFound('Autor não encontrado'));
             }
             await author.findByIdAndUpdate(id, req.body);
             return res.status(200).json({ message: 'Autor atualizado com sucesso' });
@@ -62,7 +63,7 @@ class AuthorController {
         try {
             const id = req.params.id;
             if (!id) {
-                return res.status(404).json({ error: 'Autor não encontrado' });
+                return next(new NotFound('Autor não encontrado'));
             }
             await author.deleteOne({ _id: id });
             return res.status(204).send();

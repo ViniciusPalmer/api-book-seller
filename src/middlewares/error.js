@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import AppError from '../errors/appError.js';
 import BadRequest from '../errors/badRequest.js';
+import NotFound from '../errors/NotFound.js';
 import ValidationError from '../errors/ValidationError.js';
 
 function errorHandler(err, req, res, next) {
@@ -8,6 +9,8 @@ function errorHandler(err, req, res, next) {
         new BadRequest().sendErrorResponse(res);
     }else if(err instanceof mongoose.Error.ValidationError) {
         new ValidationError(err).sendErrorResponse(res);
+    }else if(err instanceof NotFound) {
+        err.sendErrorResponse(res);
     }else{
         new AppError().sendErrorResponse(res);
     }

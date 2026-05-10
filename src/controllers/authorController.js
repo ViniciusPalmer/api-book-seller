@@ -1,7 +1,7 @@
 import { author } from '../models/Author.js';
 
 class AuthorController {
-    static async getAuthor(_, res) {
+    static async getAuthor(_, res, next) {
         try {
             const getAuthor = await author.find({});
             return res.status(200).json(getAuthor);
@@ -23,7 +23,7 @@ class AuthorController {
         }
     }
 
-    static async getAuthorByName(req, res) {
+    static async getAuthorByName(req, res, next) {
         try {
             const name = req.params.name;
             const result = await author.find({ name });
@@ -36,7 +36,7 @@ class AuthorController {
         }
     }
 
-    static async createNewAuthor(req, res) {
+    static async createNewAuthor(req, res, next) {
         try {
             const newAuthor = await author.create(req.body);
             return res.status(201).send({ message: 'Criado com sucesso', author: newAuthor });
@@ -45,7 +45,7 @@ class AuthorController {
         }
     }
 
-    static async updateAuthor(req, res) {
+    static async updateAuthor(req, res, next) {
         try {
             const id = req.params.id;
             if (!id) {
@@ -58,7 +58,7 @@ class AuthorController {
         }
     }
 
-    static async deleteAuthor(req, res) {
+    static async deleteAuthor(req, res, next) {
         try {
             const id = req.params.id;
             if (!id) {

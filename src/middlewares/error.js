@@ -1,10 +1,15 @@
 import mongoose from 'mongoose';
+import AppError from '../errors/appError.js';
+import BadRequest from '../errors/badRequest.js';
+import ValidationError from '../errors/ValidationError.js';
 
 function errorHandler(err, req, res, next) {
     if(err instanceof mongoose.Error.CastError) {
-        return res.status(400).json({ message: 'ID inválido' });
+        new BadRequest().sendErrorResponse(res);
+    }else if(err instanceof mongoose.Error.ValidationError) {
+        new ValidationError(err).sendErrorResponse(res);
     }else{
-        res.status(500).json({ message: `${err.message} - Ocorreu um erro no servidor` });
+        new AppError().sendErrorResponse(res);
     }
 }
 

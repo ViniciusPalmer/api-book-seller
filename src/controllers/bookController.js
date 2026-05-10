@@ -1,30 +1,30 @@
-import { author } from '../models/Author.js';
-import book from '../models/Book.js';
+import NotFound from '../errors/NotFound.js';
+import { author, book } from '../models/index.js';
 
 class BookController {
-    static async getBooks(_, res) {
+    static async getBooks(_, res, next) {
         try {
             const getBooks = await book.find({});
             return res.status(200).json(getBooks);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error)
         }
     }
 
-    static async getBookById(req, res) {
+    static async getBookById(req, res, next) {
         try {
             const id = req.params.id;
             const result = await book.findById(id);
             if (!result) {
-                return res.status(404).json({ error: 'Livro não encontrado' });
+                return next(new NotFound('Livro não encontrado'));
             }
             return res.status(200).json(result);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error);
         }
     }
 
-    static async createNewBook(req, res) {
+    static async createNewBook(req, res, next) {
 
         const newBook = req.body;
 
@@ -34,11 +34,11 @@ class BookController {
             const createdBook = await book.create(fullBook);
             return res.status(201).send({ message: 'Criado com sucesso', book: createdBook });
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha ao cadastrar livro` });
+            next(error);
         }
     }
 
-    static async updateBook(req, res) {
+    static async updateBook(req, res, next) {
         try {
             const id = req.params.id;
             if (!id) {
@@ -47,11 +47,11 @@ class BookController {
             await book.findByIdAndUpdate(id, req.body);
             return res.status(200).json({ message: 'Livro atualizado com sucesso' });
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na atualização do livro` });
+            next(error);
         }
     }
 
-    static async deleteBook(req, res) {
+    static async deleteBook(req, res, next) {
         try {
             const id = req.params.id;
             if (!id) {
@@ -60,11 +60,11 @@ class BookController {
             await book.deleteOne({ _id: id });
             return res.status(204).send();
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha ao deletar o livro` });
+            next(error);
         }
     }
 
-    static async searchBooks(req, res) {
+    static async searchBooks(req, res, next) {
         try {
             const { title, year, gender, price } = req.query;
             const query = {};
@@ -77,12 +77,12 @@ class BookController {
             const results = await book.find(query);
 
             if (results.length === 0) {
-                return res.status(404).json({ error: 'Nenhum livro encontrado' });
+                return next(new NotFound("Nenhum livro encontrado"))
             }
 
             return res.status(200).json(results);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error);
         }
     }
 }

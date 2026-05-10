@@ -60,8 +60,7 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-MONGO_USER=your_username
-MONGO_PASSWORD=your_password
+MONGO_CONNECTION_STRING=mongodb+srv://<username>:<password>@personal-projects.ykzfenp.mongodb.net/library?appName=personal-projects
 ```
 
 ### Running the Server

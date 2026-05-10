@@ -4,10 +4,9 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 async function connectDB() {
+    const connectionString = process.env.MONGO_CONNECTION_STRING;
 
-    mongoose.connect(
-        `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@personal-projects.ykzfenp.mongodb.net/library?appName=personal-projects`
-    );
+    await mongoose.connect(connectionString);
 
     return mongoose.connection;
 }

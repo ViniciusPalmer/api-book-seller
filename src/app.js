@@ -1,5 +1,6 @@
 import express from 'express';
 import connectDB from './config/dbConnect.js';
+import errorHandler from './middlewares/error.js';
 import routes from './rotes/index.js';
 
 const db = await connectDB();
@@ -17,6 +18,9 @@ db.once('open', () => {
 app.get('/', (_, res) => {
     res.status(200).send('Home Page');
 });
+
+//? Middleware to handle application errors
+app.use(errorHandler)
 
 export default app;
 

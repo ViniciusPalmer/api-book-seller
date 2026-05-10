@@ -6,11 +6,11 @@ class AuthorController {
             const getAuthor = await author.find({});
             return res.status(200).json(getAuthor);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error);
         }
     }
 
-    static async getAuthorById(req, res) {
+    static async getAuthorById(req, res, next) {
         try {
             const id = req.params.id;
             const result = await author.findById(id);
@@ -19,7 +19,7 @@ class AuthorController {
             }
             return res.status(200).json(result);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error);
         }
     }
 
@@ -32,7 +32,7 @@ class AuthorController {
             }
             return res.status(200).json(result);
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na requisição` });
+            next(error);
         }
     }
 
@@ -41,7 +41,7 @@ class AuthorController {
             const newAuthor = await author.create(req.body);
             return res.status(201).send({ message: 'Criado com sucesso', author: newAuthor });
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha ao cadastrar autor` });
+            next(error);
         }
     }
 
@@ -54,7 +54,7 @@ class AuthorController {
             await author.findByIdAndUpdate(id, req.body);
             return res.status(200).json({ message: 'Autor atualizado com sucesso' });
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha na atualização do autor` });
+            next(error);
         }
     }
 
@@ -67,7 +67,7 @@ class AuthorController {
             await author.deleteOne({ _id: id });
             return res.status(204).send();
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - Falha ao deletar o autor` });
+            next(error);
         }
     }
 }

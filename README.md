@@ -1,15 +1,18 @@
 # 📚 API Book Seller
 
-A REST API for managing books, built with **Express.js** and **MongoDB**.
+A REST API for managing books and authors, built with **Express.js** and **MongoDB**.
 
 ## 🚀 Features
 
-- 📖 **CRUD Operations** — Create, Read, Update, and Delete books
-- 🔍 **Get by ID** — Retrieve specific books by their ID
+- 📖 **CRUD Operations** — Create, Read, Update, and Delete books and authors
+- 🔍 **Get by ID** — Retrieve specific books or authors by their ID
 - 🔎 **Search Books** — Filter books by title, year, gender, or price
+- ⚠️ **Error Handling** — Structured error classes with centralized middleware
+- 🔄 **Validation** — Global request validation using Mongoose
 - 🌐 **Express Server** — Fast and lightweight web server
 - 💾 **MongoDB Database** — Persistent data storage with Mongoose ODM
 - ⚡ **Hot Reload** — Development mode with Nodemon
+- 🧹 **Code Linting** — ESLint for code quality
 
 ## 🛠️ Tech Stack
 
@@ -26,20 +29,31 @@ A REST API for managing books, built with **Express.js** and **MongoDB**.
 ```
 ├── src/
 │   ├── config/
-│   │   └── dbConnect.js       # MongoDB connection
+│   │   └── dbConnect.js          # MongoDB connection
 │   ├── controllers/
-│   │   ├── bookController.js  # Book business logic
-│   │   └── authorController.js # Author business logic
+│   │   ├── bookController.js     # Book business logic
+│   │   └── authorController.js  # Author business logic
+│   ├── errors/
+│   │   ├── appError.js           # Base application error
+│   │   ├── badRequest.js         # Bad request error (400)
+│   │   ├── notFound.js           # Not found error (404)
+│   │   └── validationError.js    # Validation error (400)
+│   ├── middlewares/
+│   │   ├── error.js              # Global error handler
+│   │   └── handler404.js         # 404 not found handler
 │   ├── models/
-│   │   ├── Book.js            # Mongoose schema
-│   │   └── Author.js          # Author schema
+│   │   ├── Author.js             # Author Mongoose schema
+│   │   ├── Book.js               # Book Mongoose schema
+│   │   ├── globalValidator.js    # Global request validator
+│   │   └── index.js              # Models index (exports)
 │   ├── rotes/
-│   │   ├── booksRoutes.js      # Book API routes
-│   │   ├── authorsRoutes.js    # Author API routes
-│   │   └── index.js            # Route aggregator
-│   └── app.js                  # Express app setup
-├── server.js                   # Server entry point
-└── package.json
+│   │   ├── authorsRoutes.js      # Author API routes
+│   │   ├── booksRoutes.js        # Book API routes
+│   │   └── index.js              # Route aggregator
+│   └── app.js                    # Express app setup
+├── server.js                     # Server entry point
+├── package.json
+└── .env                          # Environment variables
 ```
 
 ## 🚦 Getting Started
@@ -60,7 +74,8 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-MONGO_CONNECTION_STRING=mongodb+srv://<username>:<password>@personal-projects.ykzfenp.mongodb.net/library?appName=personal-projects
+MONGO_CONNECTION_STRING=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/library?appName=personal-projects
+PORT=3000
 ```
 
 ### Running the Server
@@ -134,6 +149,19 @@ Query parameters (all optional):
 ```bash
 curl "http://localhost:3000/livros/busca?title=gatsby"
 ```
+
+## ⚠️ Error Handling
+
+The API uses structured error classes with centralized middleware:
+
+| Error Class | HTTP Status | Description |
+|-------------|-------------|-------------|
+| `AppError` | 500 | Generic application error |
+| `BadRequest` | 400 | Invalid request (invalid ID format) |
+| `NotFound` | 404 | Resource not found |
+| `ValidationError` | 400 | Mongoose validation error |
+
+All errors are handled by the global `errorHandler` middleware.
 
 ## 🧪 Linting
 

@@ -66,13 +66,18 @@ class BookController {
 
     static async searchBooks(req, res, next) {
         try {
-            const { title, year, gender, price } = req.query;
+            const { title, year, gender, price, maxPages, minPages, authorName } = req.query;
             const query = {};
 
             if (title) query.title = { $regex: title, $options: 'i' };
             if (year) query.year = Number(year);
             if (gender) query.gender = { $regex: gender, $options: 'i' };
             if (price) query.price = Number(price);
+            if (maxPages) query.pages = { ...query.pages, $lte: Number(maxPages) };
+            if (minPages) query.pages = { ...query.pages, $gte: Number(minPages) };
+            if(authorName) {
+                query['author.name'] = { $regex: authorName, $options: 'i' };
+            }
 
             const results = await book.find(query);
 

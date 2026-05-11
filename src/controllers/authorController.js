@@ -4,8 +4,15 @@ import { author } from '../models/index.js';
 class AuthorController {
     static async getAuthor(_, res, next) {
         try {
-            const getAuthor = await author.find({});
-            return res.status(200).json(getAuthor);
+            const searchAuthor = author.find({});
+            req.results = searchAuthor;
+
+            const results = await author.find({});
+            if (results.length === 0) {
+                return next(new NotFound("Nenhum autor encontrado"));
+            }
+
+            return next();
         } catch (error) {
             next(error);
         }

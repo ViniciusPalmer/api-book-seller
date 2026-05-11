@@ -5,7 +5,7 @@ import pagination from '../middlewares/pagination.js';
 const routes = express.Router();
 
 routes.get('/livros', BookController.getBooks, pagination);
-routes.get('/livros/busca', BookController.searchBooks);
+routes.get('/livros/busca', BookController.searchBooks, pagination);
 routes.get('/livros/:id', BookController.getBookById);
 routes.post('/livros', BookController.createNewBook);
 routes.put('/livros/:id', BookController.updateBook);

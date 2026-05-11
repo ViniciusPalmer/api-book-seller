@@ -81,13 +81,15 @@ class BookController {
                 query['author.name'] = { $regex: authorName, $options: 'i' };
             }
 
-            const results = await book.find(query);
+            const searchBook = book.find(query);
+            req.results = searchBook;
 
+            const results = await book.find(query);
             if (results.length === 0) {
                 return next(new NotFound("Nenhum livro encontrado"))
             }
 
-            return res.status(200).json(results);
+            return next();
         } catch (error) {
             next(error);
         }

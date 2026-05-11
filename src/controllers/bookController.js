@@ -2,11 +2,13 @@ import NotFound from '../errors/NotFound.js';
 import { author, book } from '../models/index.js';
 
 class BookController {
-    static async getBooks(_, res, next) {
+    static async getBooks(req, res, next) {
         try {
-            const getBooks = await book.find({});
-            return res.status(200).json(getBooks);
+            const searchBook = book.find();
+            req.results = searchBook;
+            return next();
         } catch (error) {
+            console.log(error);
             next(error)
         }
     }
